@@ -1,44 +1,48 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-
-<title>Jiayu Xu</title>
-
-<style>
-
-body {
-    max-width: 750px;
-    margin: auto;
-    padding: 50px;
-    font-family: Georgia, serif;
-    line-height: 1.8;
-    font-size: 18px;
-}
-
-h1 {
-    margin-bottom: 5px;
-}
-
-</style>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jiayu Xu</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
+  <header class="site-header">
+    <a class="brand" href="index.html">Jiayu Xu</a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a class="active" href="index.html">home</a>
+      <a href="diary.html">diary</a>
+      <a href="letters.html">letters</a>
+      <a href="research.html">research</a>
+      <a href="other.html">other</a>
+    </nav>
+  </header>
 
-<h1>Jiayu Xu</h1>
+  <main class="home-layout">
+    <section class="intro" aria-labelledby="intro-title">
+      <p class="kicker">Paris · physics · ordinary days</p>
+      <h1 id="intro-title">Jiayu Xu</h1>
+      <p class="lead">Physics student in Paris. This is a quiet place for notes on physics, literature, music, letters, and the daily weather of thought.</p>
+    </section>
 
-<p>
-Physics student in Paris.
-</p>
-
-<hr>
-
-<p>
-Notes on physics, literature, music,
-and ordinary days.
-</p>
-
+    <section class="home-notes" aria-label="Site sections">
+      <a class="note-link" href="diary.html">
+        <span>Diary</span>
+        <small>Daily notes, indexed by year, month, and date.</small>
+      </a>
+      <a class="note-link" href="letters.html">
+        <span>Letters</span>
+        <small>Letters gathered by name, with room for correspondence.</small>
+      </a>
+      <a class="note-link muted" href="research.html">
+        <span>Research</span>
+        <small>Reserved for future work.</small>
+      </a>
+      <a class="note-link muted" href="other.html">
+        <span>Other</span>
+        <small>A spare shelf for things not yet named.</small>
+      </a>
+    </section>
+  </main>
 </body>
-
 </html>
