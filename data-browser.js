@@ -121,24 +121,19 @@ function makeLeaf(label, entry, type) {
 
 function diaryLeafLabel(entry) {
   const date = new Date(`${entry.date}T00:00:00`);
-  if (Number.isNaN(date.getTime())) return entry.title || entry.date || "Untitled";
+  if (Number.isNaN(date.getTime())) return entry.date || "Untitled";
 
-  const day = String(date.getDate());
-  const suffix = String(entry.title || "")
-    .replace(/^\d{1,2}月\d{1,2}日\s*·?\s*/, "")
-    .trim();
-  return suffix ? `${day} · ${suffix}` : day;
+  return String(date.getDate());
 }
 
 function renderEntry(entry, type) {
   const body = Array.isArray(entry.body) ? entry.body : [];
-  const meta = type === "letters"
-    ? `<span class="person">${escapeHtml(entry.person || "")}</span>`
-    : `<time datetime="${escapeHtml(entry.date || "")}">${formatDate(entry.date)}</time>`;
+  const meta = type === "letters" ? `<span class="person">${escapeHtml(entry.person || "")}</span>` : "";
+  const title = type === "letters" ? entry.title || "Untitled" : formatDate(entry.date);
 
   reader.innerHTML = `
     ${meta}
-    <h1>${escapeHtml(entry.title || "Untitled")}</h1>
+    <h1>${escapeHtml(title)}</h1>
     <div class="entry-body">
       ${body.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
     </div>
