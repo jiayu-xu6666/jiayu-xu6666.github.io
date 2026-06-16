@@ -94,16 +94,22 @@ function makeGroup(label, open = false) {
 
   const children = document.createElement("div");
   children.className = "tree-children";
-  children.hidden = !open;
+  setGroupOpen(toggle, children, open);
 
   toggle.addEventListener("click", () => {
     const expanded = toggle.getAttribute("aria-expanded") === "true";
-    toggle.setAttribute("aria-expanded", String(!expanded));
-    children.hidden = expanded;
+    setGroupOpen(toggle, children, !expanded);
   });
 
   root.append(toggle, children);
   return { root, children };
+}
+
+function setGroupOpen(toggle, children, open) {
+  toggle.setAttribute("aria-expanded", String(open));
+  children.hidden = !open;
+  children.classList.toggle("is-collapsed", !open);
+  children.style.display = open ? "" : "none";
 }
 
 function makeLeaf(label, entry, type) {
