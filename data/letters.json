@@ -1,0 +1,11 @@
+[
+  {
+    "person": "Example Name",
+    "date": "2026-06-16",
+    "title": "A First Letter",
+    "body": [
+      "This is a placeholder letter. Add new letters to data/letters.json with a person, date, title, and body.",
+      "The index on the left groups letters by name."
+    ]
+  }
+]
