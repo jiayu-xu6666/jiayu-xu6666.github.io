@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reading Notes · Jiayu Xu</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Home">
+      <img src="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/icons/moon.svg" alt="">
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="diary.html">Diary</a>
+      <a href="letters.html">Letters</a>
+      <a class="active" href="reading.html">Reading Notes</a>
+      <a href="research.html">Research</a>
+      <a href="other.html">Other</a>
+    </nav>
+  </header>
+
+  <main class="archive-layout" data-archive="reading">
+    <aside class="archive-index" aria-label="Reading notes index">
+      <div class="index-heading">
+        <span>Reading Notes</span>
+        <small>book · notes</small>
+      </div>
+      <div id="archive-tree" class="tree"></div>
+    </aside>
+
+    <article id="archive-reader" class="reader" aria-live="polite"></article>
+  </main>
+
+  <script src="data-browser.js" defer></script>
+</body>
+</html>
