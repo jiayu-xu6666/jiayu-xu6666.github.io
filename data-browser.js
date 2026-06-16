@@ -9,7 +9,7 @@ const monthNames = [
 
 if (archive && tree && reader) {
   const type = archive.dataset.archive;
-  const source = type === "letters" ? "data/letters.json" : "data/diary.json";
+  const source = dataSource(type);
 
   loadEntries(type, source)
     .then((entries) => {
@@ -24,12 +24,21 @@ if (archive && tree && reader) {
         renderEntry(sorted[0], type);
         const firstLeaf = tree.querySelector(".tree-leaf");
         if (firstLeaf) firstLeaf.classList.add("active");
+      } else if (type === "reading") {
+        buildReading(sorted);
+        renderReadingIntro();
       } else {
         buildDiary(sorted);
         renderDiaryIntro();
       }
     })
     .catch(() => renderEmpty(type));
+}
+
+function dataSource(type) {
+  if (type === "letters") return "data/letters.json";
+  if (type === "reading") return "data/reading.json";
+  return "data/diary.json";
 }
 
 function loadEntries(type, source) {
@@ -59,6 +68,11 @@ function sortEntries(type, entries) {
   return [...entries].sort((a, b) => {
     if (type === "letters") {
       return `${a.person || ""}${b.date || ""}`.localeCompare(`${b.person || ""}${a.date || ""}`);
+    }
+    if (type === "reading") {
+      const bookOrder = String(a.book || "").localeCompare(String(b.book || ""));
+      if (bookOrder !== 0) return bookOrder;
+      return String(b.date || b.title || "").localeCompare(String(a.date || a.title || ""));
     }
     return String(b.date || "").localeCompare(String(a.date || ""));
   });
@@ -101,6 +115,22 @@ function buildLetters(entries) {
     const personGroup = makeGroup(person, true);
     items.forEach((entry) => personGroup.children.append(makeLeaf(entry.title || entry.date, entry, "letters")));
     tree.append(personGroup.root);
+  });
+}
+
+function buildReading(entries) {
+  const grouped = new Map();
+
+  entries.forEach((entry) => {
+    const book = entry.book || "Untitled book";
+    if (!grouped.has(book)) grouped.set(book, []);
+    grouped.get(book).push(entry);
+  });
+
+  grouped.forEach((items, book) => {
+    const bookGroup = makeGroup(book, false);
+    items.forEach((entry) => bookGroup.children.append(makeLeaf(readingLeafLabel(entry), entry, "reading")));
+    tree.append(bookGroup.root);
   });
 }
 
@@ -154,10 +184,14 @@ function diaryLeafLabel(entry) {
   return String(date.getDate());
 }
 
+function readingLeafLabel(entry) {
+  return entry.title || entry.date || "Untitled note";
+}
+
 function renderEntry(entry, type) {
   const body = Array.isArray(entry.body) ? entry.body : [];
-  const meta = type === "letters" ? `<span class="person">${escapeHtml(entry.person || "")}</span>` : "";
-  const title = type === "letters" ? entry.title || "Untitled" : formatDate(entry.date);
+  const meta = renderMeta(entry, type);
+  const title = renderTitle(entry, type);
 
   reader.innerHTML = `
     ${meta}
@@ -169,7 +203,7 @@ function renderEntry(entry, type) {
 }
 
 function renderEmpty(type) {
-  const label = type === "letters" ? "letters" : "diary entries";
+  const label = type === "letters" ? "letters" : type === "reading" ? "reading notes" : "diary entries";
   tree.innerHTML = "";
   reader.innerHTML = `<p class="empty-state">No ${label} yet.</p>`;
 }
@@ -181,6 +215,27 @@ function renderDiaryIntro() {
       <p>This space is reserved for an introduction to the diary.</p>
     </div>
   `;
+}
+
+function renderReadingIntro() {
+  reader.innerHTML = `
+    <h1>Reading Notes</h1>
+    <div class="entry-body">
+      <p>This space is reserved for notes on books and essays.</p>
+    </div>
+  `;
+}
+
+function renderMeta(entry, type) {
+  if (type === "letters") return `<span class="person">${escapeHtml(entry.person || "")}</span>`;
+  if (type === "reading") return `<span class="person">${escapeHtml(entry.book || "")}</span>`;
+  return "";
+}
+
+function renderTitle(entry, type) {
+  if (type === "letters") return entry.title || "Untitled";
+  if (type === "reading") return entry.title || entry.date || "Untitled note";
+  return formatDate(entry.date);
 }
 
 function formatDate(value) {
