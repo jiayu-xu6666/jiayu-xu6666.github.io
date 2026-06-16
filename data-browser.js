@@ -11,11 +11,7 @@ if (archive && tree && reader) {
   const type = archive.dataset.archive;
   const source = type === "letters" ? "data/letters.json" : "data/diary.json";
 
-  fetch(source)
-    .then((response) => {
-      if (!response.ok) throw new Error(`Could not load ${source}`);
-      return response.json();
-    })
+  loadEntries(type, source)
     .then((entries) => {
       if (!Array.isArray(entries) || entries.length === 0) {
         renderEmpty(type);
@@ -34,6 +30,29 @@ if (archive && tree && reader) {
       }
     })
     .catch(() => renderEmpty(type));
+}
+
+function loadEntries(type, source) {
+  return fetchJson(source).then((entries) => {
+    if (type !== "diary") return entries;
+
+    return fetchJson("data/diary-updates.json", true).then((updates) => [
+      ...entries,
+      ...updates
+    ]);
+  });
+}
+
+function fetchJson(source, optional = false) {
+  return fetch(source)
+    .then((response) => {
+      if (!response.ok) {
+        if (optional) return [];
+        throw new Error(`Could not load ${source}`);
+      }
+      return response.json();
+    })
+    .then((entries) => (Array.isArray(entries) ? entries : []));
 }
 
 function sortEntries(type, entries) {
