@@ -261,40 +261,6 @@ h1 {
   color: var(--sea);
 }
 
-.diary-leaf {
-  display: grid;
-  gap: 4px;
-  padding: 11px 10px 12px;
-  border-left: 2px solid transparent;
-}
-
-.diary-leaf-day {
-  color: var(--ink);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1.2;
-}
-
-.diary-leaf-preview {
-  color: var(--soft-ink);
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: 13px;
-  line-height: 1.45;
-}
-
-.diary-leaf:hover,
-.diary-leaf.active {
-  background: rgba(236, 232, 221, 0.58);
-  border-left-color: var(--sea);
-  color: var(--ink);
-}
-
-.diary-leaf:hover .diary-leaf-preview,
-.diary-leaf.active .diary-leaf-preview {
-  color: #3f473d;
-}
-
 .reader {
   min-height: 58vh;
   padding-bottom: 72px;
@@ -388,14 +354,4 @@ h1 {
     max-height: 42vh;
   }
 
-  .diary-leaf {
-    padding: 9px 8px 10px;
-  }
-
-  .diary-leaf-preview {
-    display: -webkit-box;
-    overflow: hidden;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
 }
