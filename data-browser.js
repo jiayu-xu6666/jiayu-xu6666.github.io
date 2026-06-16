@@ -59,7 +59,7 @@ function buildDiary(entries) {
     months.forEach((items, month) => {
       const monthLabel = monthNames[Number(month) - 1] || month;
       const monthGroup = makeGroup(monthLabel, true);
-      items.forEach((entry) => monthGroup.children.append(makeLeaf(entry.date, entry, "diary")));
+      items.forEach((entry) => monthGroup.children.append(makeLeaf(diaryLeafLabel(entry), entry, "diary")));
       yearGroup.children.append(monthGroup.root);
     });
     tree.append(yearGroup.root);
@@ -117,6 +117,17 @@ function makeLeaf(label, entry, type) {
     renderEntry(entry, type);
   });
   return leaf;
+}
+
+function diaryLeafLabel(entry) {
+  const date = new Date(`${entry.date}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return entry.title || entry.date || "Untitled";
+
+  const day = String(date.getDate());
+  const suffix = String(entry.title || "")
+    .replace(/^\d{1,2}月\d{1,2}日\s*·?\s*/, "")
+    .trim();
+  return suffix ? `${day} · ${suffix}` : day;
 }
 
 function renderEntry(entry, type) {
