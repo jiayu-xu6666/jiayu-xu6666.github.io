@@ -231,6 +231,10 @@ h1 {
   display: none;
 }
 
+.tree-children.is-collapsed {
+  display: none !important;
+}
+
 .tree-leaf {
   padding: 5px 0;
   font-size: 14px;
