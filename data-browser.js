@@ -62,7 +62,7 @@ function buildDiary(entries) {
     months.forEach((items, month) => {
       const monthLabel = monthNames[Number(month) - 1] || month;
       const monthGroup = makeGroup(monthLabel, year === activeYear && month === activeMonth);
-      items.forEach((entry) => monthGroup.children.append(makeDiaryLeaf(entry)));
+      items.forEach((entry) => monthGroup.children.append(makeLeaf(diaryLeafLabel(entry), entry, "diary")));
       yearGroup.children.append(monthGroup.root);
     });
     tree.append(yearGroup.root);
@@ -128,60 +128,11 @@ function makeLeaf(label, entry, type) {
   return leaf;
 }
 
-function makeDiaryLeaf(entry) {
-  const leaf = document.createElement("button");
-  leaf.className = "tree-leaf diary-leaf";
-  leaf.type = "button";
-
-  const day = document.createElement("span");
-  day.className = "diary-leaf-day";
-  day.textContent = diaryLeafLabel(entry);
-
-  const preview = document.createElement("span");
-  preview.className = "diary-leaf-preview";
-  preview.textContent = diaryPreview(entry);
-
-  leaf.append(day, preview);
-  leaf.addEventListener("click", () => {
-    document.querySelectorAll(".tree-leaf.active").forEach((item) => item.classList.remove("active"));
-    leaf.classList.add("active");
-    renderEntry(entry, "diary");
-  });
-  return leaf;
-}
-
 function diaryLeafLabel(entry) {
   const date = new Date(`${entry.date}T00:00:00`);
   if (Number.isNaN(date.getTime())) return entry.date || "Untitled";
 
   return String(date.getDate());
-}
-
-function diaryPreview(entry) {
-  const body = Array.isArray(entry.body) ? entry.body : [];
-  const text = body
-    .map((paragraph) => String(paragraph || "").trim())
-    .find((paragraph) => paragraph && !isTimeMarker(paragraph));
-
-  if (!text) return "No preview available.";
-
-  const sentence = firstSentence(text);
-  return truncatePreview(sentence || text, 110);
-}
-
-function isTimeMarker(text) {
-  return /^(morning|noon|afternoon|night|mid-?night|all day)\s*[:：]?$/i.test(text.trim());
-}
-
-function firstSentence(text) {
-  const match = text.match(/^(.+?[。！？.!?])/);
-  return match ? match[1].trim() : "";
-}
-
-function truncatePreview(text, limit) {
-  const normalized = String(text || "").replace(/\s+/g, " ").trim();
-  if (normalized.length <= limit) return normalized;
-  return `${normalized.slice(0, limit).trim()}...`;
 }
 
 function renderEntry(entry, type) {
