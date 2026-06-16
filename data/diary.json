@@ -1,0 +1,10 @@
+[
+  {
+    "date": "2026-06-16",
+    "title": "A Room for Daily Notes",
+    "body": [
+      "This is the first placeholder entry. Add new diary entries to data/diary.json, and the left tree will rebuild itself by year, month, and date.",
+      "Each entry can hold several paragraphs. The right side keeps the typography quiet, spacious, and close to printed essays."
+    ]
+  }
+]
