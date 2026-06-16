@@ -25,12 +25,13 @@ if (archive && tree && reader) {
       const sorted = sortEntries(type, entries);
       if (type === "letters") {
         buildLetters(sorted);
+        renderEntry(sorted[0], type);
+        const firstLeaf = tree.querySelector(".tree-leaf");
+        if (firstLeaf) firstLeaf.classList.add("active");
       } else {
         buildDiary(sorted);
+        renderDiaryIntro();
       }
-      renderEntry(sorted[0], type);
-      const firstLeaf = tree.querySelector(".tree-leaf");
-      if (firstLeaf) firstLeaf.classList.add("active");
     })
     .catch(() => renderEmpty(type));
 }
@@ -152,6 +153,15 @@ function renderEmpty(type) {
   const label = type === "letters" ? "letters" : "diary entries";
   tree.innerHTML = "";
   reader.innerHTML = `<p class="empty-state">No ${label} yet.</p>`;
+}
+
+function renderDiaryIntro() {
+  reader.innerHTML = `
+    <h1>Diary</h1>
+    <div class="entry-body">
+      <p>This space is reserved for an introduction to the diary.</p>
+    </div>
+  `;
 }
 
 function formatDate(value) {
