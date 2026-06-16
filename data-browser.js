@@ -46,6 +46,8 @@ function sortEntries(type, entries) {
 
 function buildDiary(entries) {
   const grouped = new Map();
+  const activeDate = String(entries[0]?.date || "");
+  const [activeYear, activeMonth] = activeDate.split("-");
 
   entries.forEach((entry) => {
     const [year, month] = String(entry.date).split("-");
@@ -55,10 +57,10 @@ function buildDiary(entries) {
   });
 
   grouped.forEach((months, year) => {
-    const yearGroup = makeGroup(year, true);
+    const yearGroup = makeGroup(year, year === activeYear);
     months.forEach((items, month) => {
       const monthLabel = monthNames[Number(month) - 1] || month;
-      const monthGroup = makeGroup(monthLabel, true);
+      const monthGroup = makeGroup(monthLabel, year === activeYear && month === activeMonth);
       items.forEach((entry) => monthGroup.children.append(makeLeaf(diaryLeafLabel(entry), entry, "diary")));
       yearGroup.children.append(monthGroup.root);
     });
