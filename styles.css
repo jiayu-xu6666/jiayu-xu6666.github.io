@@ -227,6 +227,10 @@ h1 {
   border-left: 1px solid var(--line);
 }
 
+.tree-children[hidden] {
+  display: none;
+}
+
 .tree-leaf {
   padding: 5px 0;
   font-size: 14px;
