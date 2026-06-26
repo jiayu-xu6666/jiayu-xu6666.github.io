@@ -53,7 +53,7 @@ function loadEntries(type, source) {
 }
 
 function fetchJson(source, optional = false) {
-  return fetch(source)
+  return fetch(source, { cache: "no-store" })
     .then((response) => {
       if (!response.ok) {
         if (optional) return [];
@@ -197,9 +197,21 @@ function renderEntry(entry, type) {
     ${meta}
     <h1>${escapeHtml(title)}</h1>
     <div class="entry-body">
-      ${body.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join("")}
+      ${body.map(renderBodyItem).join("")}
     </div>
   `;
+}
+
+function renderBodyItem(item) {
+  if (item && typeof item === "object" && item.type === "image" && item.src) {
+    return `
+      <figure class="entry-figure">
+        <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.alt || "")}" loading="lazy">
+      </figure>
+    `;
+  }
+
+  return `<p>${escapeHtml(item)}</p>`;
 }
 
 function renderEmpty(type) {
@@ -253,6 +265,6 @@ function escapeHtml(value) {
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
+    .replaceAll('\"', "&quot;")
     .replaceAll("'", "&#039;");
 }
