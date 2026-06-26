@@ -45,9 +45,13 @@ function loadEntries(type, source) {
   return fetchJson(source).then((entries) => {
     if (type !== "diary") return entries;
 
-    return fetchJson("data/diary-updates.json", true).then((updates) => [
+    return Promise.all([
+      fetchJson("data/diary-updates.json", true),
+      fetchJson("data/diary-latest.json", true)
+    ]).then(([updates, latest]) => [
       ...entries,
-      ...updates
+      ...updates,
+      ...latest
     ]);
   });
 }
@@ -265,6 +269,6 @@ function escapeHtml(value) {
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
-    .replaceAll('\"', "&quot;")
+    .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
